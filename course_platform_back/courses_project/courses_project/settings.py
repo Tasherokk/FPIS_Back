@@ -19,9 +19,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(aym-7lrjoe#@gfk*6+t$shthuo07g5@=^_7*8z19roputik_)'
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
@@ -35,9 +32,7 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
 ALLOWED_HOSTS = [
-    # '127.0.0.1',
     'api.oysana-edu.kz',
-    '138.197.184.105',
 ]
 
 
@@ -70,12 +65,8 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'https://167.99.141.24',
     'https://oysana-edu.kz',
     'https://www.oysana-edu.kz',
-    # 'https://oysana.site',
-    # 'https://www.oysana.site',
-    # 'http://localhost:4200',
 ]
 
 CORS_ALLOW_HEADERS = [
@@ -114,21 +105,9 @@ WSGI_APPLICATION = 'courses_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'defaultdb',
-        'USER': 'doadmin',
-        'PASSWORD': 'AVNS_A7pRv-KSvJp41diuCwP',
-        'HOST': 'db-postgresql-fra1-55616-do-user-18239563-0.k.db.ondigitalocean.com',
-        'PORT': '25060',
-        # 'OPTIONS': {
-        #     'sslmode': 'require',
-        #     'sslrootcert': '/путь/к/ca-certificate.crt'
-        # }
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
 }
 
 
