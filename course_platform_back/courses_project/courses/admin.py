@@ -128,7 +128,12 @@ class UserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'password', 'password_link')}),
         ('Personal info', {'fields': ('name', 'role', 'curator')}),
-        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
+        ('Permissions', {
+            'fields': (
+                'is_active', 'is_staff', 'is_superuser',
+                'groups', 'user_permissions',
+            ),
+        }),
     )
 
     add_fieldsets = (
@@ -138,6 +143,7 @@ class UserAdmin(UserAdmin):
         }),
     )
 
+    filter_horizontal = ('groups', 'user_permissions')
     readonly_fields = ['password_link']
 
     def password_link(self, obj):

@@ -6,14 +6,16 @@ from rest_framework.response import Response
 from rest_framework import status, permissions
 from .models import Course, Topic, Enrollment, UserTestResult, Test, Answer, Question, Registration
 from .serializers import CourseSerializer, TopicSerializer, TestSerializer, RegistrationSerializer
+import logging
 
+logger = logging.getLogger(__name__)
 
 # --------------------------------------
 
 
 class CourseListView(APIView):
     permission_classes = [permissions.AllowAny]
-
+    logger.info("Course list requested")
     def get(self, request):
         courses = Course.objects.all()
         serializer = CourseSerializer(courses, many=True)
@@ -175,7 +177,7 @@ class TopicDetailView(APIView):
 
     def get(self, request, topic_id):
         user = request.user
-
+        logger.info(f"User {user.id} requested topic {topic_id}")
         # Получаем тему
         try:
             topic = Topic.objects.select_related('course').get(id=topic_id)
@@ -244,6 +246,7 @@ class SubmitTestView(APIView):
 
     def post(self, request, topic_id):
         user = request.user
+        logger.info(f"User {user.id} submitted test for topic {topic_id}")
 
         # Проверяем, есть ли такой topic и test
         try:
@@ -261,6 +264,7 @@ class SubmitTestView(APIView):
 
         # Получаем ответы
         user_answers = request.data.get('answers', [])
+        logger.debug(f"Submitted answers: {user_answers}")
         if not user_answers:
             return Response({"detail": "Необходимо указать ответы."},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -306,7 +310,7 @@ class SubmitTestView(APIView):
             })
 
         passed = (score >= 9)
-
+        logger.info(f"User {user.id} scored {score}, passed: {passed}")
         # Проверяем, есть ли у пользователя старая запись (UserTestResult)
         # Если да – не затираем, а только обновляем, если новая попытка лучше
         utr, created = UserTestResult.objects.get_or_create(
@@ -412,6 +416,7 @@ class CuratorStudentsProgressView(APIView):
 
     def get(self, request):
         user = request.user
+        logger.info(f"Curator {user.id} requested student progress")
         if user.role != 'curator':
             return Response({"detail": "Доступно только кураторам."},
                             status=status.HTTP_403_FORBIDDEN)
@@ -487,6 +492,7 @@ class CurrentUserView(APIView):
 class RegistrationView(APIView):
     permission_classes = [permissions.AllowAny]
     def post(self, request):
+        logger.info(f"Registration attempt with data: {request.data}")
         serializer = RegistrationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
